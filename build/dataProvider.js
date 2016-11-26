@@ -7,14 +7,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /*
 Class for generating sample ('random') data which simulates a real data coming from some sensor 
 */
-var mockDataProvider = function () {
-    function mockDataProvider(_name) {
-        _classCallCheck(this, mockDataProvider);
+module.exports = function () {
+    function dataProvider(_name) {
+        _classCallCheck(this, dataProvider);
 
         this.name = _name;
     }
 
-    _createClass(mockDataProvider, [{
+    _createClass(dataProvider, [{
         key: "generateData",
         value: function generateData() {
             return setInterval(function () {
@@ -28,8 +28,5 @@ var mockDataProvider = function () {
         }
     }]);
 
-    return mockDataProvider;
+    return dataProvider;
 }();
-
-var sampleDataSource = new mockDataProvider("First Signal");
-sampleDataSource.generateData();

@@ -1,7 +1,7 @@
 /*
 Class for generating sample ('random') data which simulates a real data coming from some sensor 
 */
-class mockDataProvider {
+module.exports = class dataProvider {
     constructor(_name){
         this.name = _name;
     }
@@ -13,9 +13,6 @@ class mockDataProvider {
                 value: Math.floor((Math.random() * 100) + 1)
             };
             console.log(data)}.bind(this), 500);
-    }
-}
-
-var sampleDataSource = new mockDataProvider("First Signal");
-sampleDataSource.generateData();
+        }
+    };
 
