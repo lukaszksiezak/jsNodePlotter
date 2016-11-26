@@ -4,6 +4,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/*
+Class for generating sample ('random') data which simulates a real data coming from some sensor 
+*/
 var mockDataProvider = function () {
     function mockDataProvider(_name) {
         _classCallCheck(this, mockDataProvider);
@@ -15,7 +18,12 @@ var mockDataProvider = function () {
         key: "generateData",
         value: function generateData() {
             return setInterval(function () {
-                console.log(this.name + ": " + Math.floor(Math.random() * 100 + 1));
+                var data = {
+                    name: this.name,
+                    timestamp: Date.now(),
+                    value: Math.floor(Math.random() * 100 + 1)
+                };
+                console.log(data);
             }.bind(this), 500);
         }
     }]);
@@ -24,7 +32,4 @@ var mockDataProvider = function () {
 }();
 
 var sampleDataSource = new mockDataProvider("First Signal");
-var anotherSampleDataSource = new mockDataProvider("Second Signal");
-
 sampleDataSource.generateData();
-anotherSampleDataSource.generateData();
