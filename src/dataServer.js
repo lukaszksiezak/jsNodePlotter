@@ -7,7 +7,14 @@ var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://localhost:27017/jsPlotterDataStorage';
 
 var sampleDataSource = new dataProvider("First Signal");
-sampleDataSource.generateData();
+sampleDataSource.generateData();  //start generating data 
+var onlineCollectedData = [];
+
+setInterval(function(){
+    onlineCollectedData.push(sampleDataSource.getCurrentData()); //collect data
+    console.log(onlineCollectedData);
+    sampleDataSource.ereaseCurrentData();
+    },1000);
 
 MongoClient.connect(url, function (err, db) {
   if (err) {
@@ -15,7 +22,10 @@ MongoClient.connect(url, function (err, db) {
   } else {
     console.log('Connection established to', url);
 
-    // do some work here with the database.
+    var collection = db.collection('SensorData');
+    
+    
+
     db.close();
   }
 });
