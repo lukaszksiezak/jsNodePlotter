@@ -49,5 +49,5 @@ function insertToDatabase(){
       db.close();
       onlineCollectedData = []; //erease data from local collection
     }
-  })  
+  });  
 };
