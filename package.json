@@ -3,7 +3,10 @@
     "version": "1.0.0",
     "devDependencies": {
         "babel-cli": "^6.0.0",
-        "mongodb": "^2.2.11"
+        "mongodb": "^2.2.11",
+        "plotly": "^1.0.6",
+        "angular": "1.5.9",
+        "nvd3": "^3.4.4"
     },
     "scripts": {
         "build": "babel src -d build"
