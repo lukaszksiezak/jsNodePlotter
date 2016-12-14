@@ -30,6 +30,7 @@ var DataEmitter = function (_EventEmitter) {
 }(EventEmitter);
 
 var dataEmitter = new DataEmitter();
+
 dataEmitter.on('dataCollected', function () {
   insertToDatabase(); //write to database 
 });

@@ -1,15 +1,18 @@
 var app = angular.module('PlottingApp', ['nvd3']);
 
-app.factory('plotService', ['$rootScope', function ($rootScope) {
+app.factory('PlotService', ['$rootScope', function ($rootScope) {
 
+var plotService = {};
+
+return plotService;
 }]); //end of plotService
 
-app.controller('plotController', ['$rootScope', '$scope', function ($rootScope, $scope) {
+app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', function ($rootScope, $scope, PlotService) {
 
     $scope.chartSettings = {
         chart: {
             type: 'lineWithFocusChart',
-            height: 200,
+            height: 600,
             margin: {
                 top: 40,
                 right: 40,
@@ -58,27 +61,26 @@ app.controller('plotController', ['$rootScope', '$scope', function ($rootScope, 
         }
     };
 
+    //Mockup data to check plotting functionality. Can be used as a reference of live data plotting 
+    // $scope.plotData = [];
 
-    $scope.plotData = [];
-
-    $scope.plotData.push(
-        {
-            "key": 'FirstSignal',
-            "values": []
-        });
+    // $scope.plotData.push(
+    //     {
+    //         "key": 'FirstSignal',
+    //         "values": []
+    //     });
 
 
-    setInterval(function () {
-        $scope.$apply(function () {
-                var val = Math.floor(Math.random() * 100 + 1)
-                $scope.plotData[0].values.push(
-                    {
-                        "x": Date.now(),
-                        "y": val
-                    }
-                );
-        })        
-}, 10);
-
-    console.log("Dlugosc tablcy: " + $scope.plotData[0].values.length);
+    // setInterval(function () {
+    //     $scope.$apply(function () {
+    //             var val = Math.floor(Math.random() * 100 + 1);
+    //             $scope.plotData[0].values.push(
+    //                 {
+    //                     "x": Date.now(),
+    //                     "y": val
+    //                 }
+    //             );
+    //         });        
+    //     }, 100);
+    
 }]); //end of plotController

@@ -11,6 +11,6 @@
         "http-server": "^0.9.0"
     },
     "scripts": {
-        "build": "babel src -d build"
+        "build": "babel src -d dataPresenter/scripts"
     }
 }

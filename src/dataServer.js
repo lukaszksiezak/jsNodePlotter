@@ -11,10 +11,10 @@ var sampleDataSource = new dataProvider("First Signal");
 sampleDataSource.generateData();  //start generating data 
 var onlineCollectedData = [];
 
-
 class DataEmitter extends EventEmitter {}
 
 const dataEmitter = new DataEmitter();
+
 dataEmitter.on('dataCollected', () => {
   insertToDatabase(); //write to database 
 });

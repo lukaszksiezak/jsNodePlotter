@@ -6,13 +6,13 @@
     <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=9,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual dataPresenter</title>
-    <link href="nv.d3.css" rel="stylesheet">
-    <script src="angular.js"></script>
+    <link href="scripts/nv.d3.css" rel="stylesheet">
+    <script src="scripts/angular.js"></script>
 </head>
 
 <body data-ng-app="PlottingApp">
 
-    <div data-ng-controller="plotController">
+    <div data-ng-controller="PlotController">
         <div>
             <nvd3 options="chartSettings" data="plotData">test</nvd3>
         </div>
@@ -21,10 +21,10 @@
          {{plotData[0].values.length}}
     </div>
 
-    <script src="d3.js"></script>
-    <script src="nv.d3.js"></script>
-    <script src="angular_nvd3.js"></script>
-    <script src="plottingService.js"></script>
+    <script src="scripts/d3.js"></script>
+    <script src="scripts/nv.d3.js"></script>
+    <script src="scripts/angular_nvd3.js"></script>
+    <script src="scripts/plottingService.js"></script>
 </body>
 
 </html>
