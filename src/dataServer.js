@@ -1,15 +1,18 @@
-'use strict';
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-var http = require('http');
-var nowjs = require('now');
+io.on('connection', function(socket){
+  console.log('a user connected');
+  
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
 
-
-var onlineCollectedData = [];
-
-class DataEmitter extends EventEmitter {}
-
-
-
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
 // const dataEmitter = new DataEmitter();
 
 // dataEmitter.on('dataCollected', () => {
