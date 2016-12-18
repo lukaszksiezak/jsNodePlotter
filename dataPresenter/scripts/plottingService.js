@@ -62,25 +62,25 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
     };
 
     //Mockup data to check plotting functionality. Can be used as a reference of live data plotting 
-    // $scope.plotData = [];
+    $scope.plotData = [];
 
-    // $scope.plotData.push(
-    //     {
-    //         "key": 'FirstSignal',
-    //         "values": []
-    //     });
+    $scope.plotData.push(
+        {
+            "key": 'FirstSignal',
+            "values": []
+        });
 
 
-    // setInterval(function () {
-    //     $scope.$apply(function () {
-    //             var val = Math.floor(Math.random() * 100 + 1);
-    //             $scope.plotData[0].values.push(
-    //                 {
-    //                     "x": Date.now(),
-    //                     "y": val
-    //                 }
-    //             );
-    //         });        
-    //     }, 100);
+    setInterval(function () {
+        $scope.$apply(function () {
+                var val = Math.floor(Math.random() * 100 + 1);
+                $scope.plotData[0].values.push(
+                    {
+                        "x": Date.now(),
+                        "y": val
+                    }
+                );
+            });        
+        }, 100);
     
 }]); //end of plotController
