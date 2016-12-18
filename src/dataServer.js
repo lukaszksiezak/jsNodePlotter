@@ -7,8 +7,9 @@ io.on('connection', function(socket){
 
   socket.on('dataReady', function (data) {
     logger("Data from provider received");
-
-    socket.emit('dataWritten');
+    //TODO: Store data to mongo database.
+    logger("Received data: " + receivedData);
+    socket.emit('dataWritten'); //Ack for dataProvider. 
   });
 });
 

@@ -5,38 +5,20 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 io.on('connection', function (socket) {
-  console.log("DataProvider connected");
+  logger("DataProvider connected");
 
   socket.on('dataReady', function (data) {
-    console.log("Data from provider received");
-
-    socket.emit('dataWritten');
+    logger("Data from provider received");
+    //TODO: Store data to mongo database.
+    logger("Received data: " + receivedData);
+    socket.emit('dataWritten'); //Ack for dataProvider. 
   });
 });
 
 http.listen(1337, function () {
-  console.log('listening on localhost:1337');
+  logger('Listening on localhost:1337');
 });
 
-// var app = require('express')();
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
-
-// io.on('connection', function(socket){
-//   socket.on('CH01', function (from, msg) {
-//     console.log('MSG', from, ' saying ', msg);
-//   });
-// });
-
-// http.listen(1337, function () {
-//   console.log('listening on localhost:1337');
-// });
-// const dataEmitter = new DataEmitter();
-
-// dataEmitter.on('dataCollected', () => {
-//   insertToDatabase(); //write to database 
-// });
-
-//     onlineCollectedData = sampleDataSource.getCurrentData(); //online data needs to be mapped to antoher array
-//     dataEmitter.emit('dataCollected');
-//     sampleDataSource.ereaseCurrentData();
+var logger = function logger(msg) {
+  console.log(new Date().toLocaleString() + ": " + msg);
+};
