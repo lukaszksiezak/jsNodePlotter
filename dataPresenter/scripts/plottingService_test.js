@@ -1,49 +1,123 @@
-var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var app = angular.module('PlottingApp', ['nvd3']);
 
-var parseTime = d3.timeParse("%d-%b-%y");
+app.factory('PlotService', ['$rootScope', function ($rootScope) {
 
-var x = d3.scaleTime()
-    .rangeRound([0, width]);
+    var plotService = {};
 
-var y = d3.scaleLinear()
-    .rangeRound([height, 0]);
+    return plotService;
+}]); //end of plotService
 
-var line = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', function ($rootScope, $scope, PlotService) {
 
-d3.tsv("data.tsv", function(d) {
-  d.date = parseTime(d.date);
-  d.close = +d.close;
-  return d;
-}, function(error, data) {
-  if (error) throw error;
+    var intervalA, intervalB, intervalC;
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain(d3.extent(data, function(d) { return d.close; }));
+    $scope.StartPlots = function () {
+        intervalA = setInterval(function () {
+            $scope.$apply(function () {
+                var val = Math.floor(Math.random() * 100 + 1);
+                $scope.plotData[0].values.push(
+                    {
+                        "x": Date.now(),
+                        "y": val
+                    }
+                );
+            });
+        }, 50);
 
-  g.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+        intervalB = setInterval(function () {
+            $scope.$apply(function () {
+                var val = Math.floor(Math.random() * 200 + 1);
+                $scope.plotData[1].values.push(
+                    {
+                        "x": Date.now(),
+                        "y": val
+                    }
+                );
+            });
+        }, 50);
 
-  g.append("g")
-      .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y))
-    .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .style("text-anchor", "end")
-      .text("Price ($)");
+        intervalC = setInterval(function () {
+            $scope.$apply(function () {
+                var val = Math.floor(Math.random() * 300 + 1);
+                $scope.plotData[2].values.push(
+                    {
+                        "x": Date.now(),
+                        "y": val
+                    }
+                );
+            });
+        }, 50);
 
-  g.append("path")
-      .datum(data)
-      .attr("class", "line")
-      .attr("d", line);
-});
+    }
+    $scope.StopPlots = function () {
+        clearInterval(intervalA);
+        clearInterval(intervalB);
+        clearInterval(intervalC);
+    }
+
+    $scope.chartSettings = {
+        chart: {
+            type: 'lineWithFocusChart',
+            height: 600,
+            margin: {
+                top: 40,
+                right: 40,
+                bottom: 40,
+                left: 60
+            },
+            legendPosition: 'right',
+            duration: 0,
+            useInteractiveGuideline: true,
+            xAxis: {
+                tickFormat: function (d) {
+                    return d3.time.format('%H:%M:%S.%L')(new Date(d));
+                },
+                axisLabel: 'Time',
+                showMaxMin: true
+            },
+            yAxis1: {
+                showMaxMin: true,
+                tickFormat: function (d) {
+                    return d3.format(',.2f')(d);
+                },
+                axisLabelDistance: 1
+            },
+            yAxis2: {
+                showMaxMin: true,
+                tickFormat: function (d) {
+                    return d3.format(',.2f')(d);
+                },
+                axisLabelDistance: 2
+            },
+            dispatch: {
+                renderEnd: function (e) { void 0; },
+                brush: function (scope, e) { void 0; },
+            },
+            lines: {
+                dispatch: {
+                    renderEnd: function (e) { void 0; }
+                }
+            },
+        }
+    };
+
+    //Mockup data to check plotting functionality. Can be used as a reference of live data plotting 
+    $scope.plotData = [];
+
+    $scope.plotData.push(
+        {
+            "key": 'FirstSignal',
+            "values": []
+        });
+
+    $scope.plotData.push(
+        {
+            "key": 'SecondSignal',
+            "values": []
+        });
+    $scope.plotData.push(
+        {
+            "key": 'ThirdSignal',
+            "values": []
+        });    
+}]); //end of plotController

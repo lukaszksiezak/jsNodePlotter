@@ -14,28 +14,21 @@
 
     <div data-ng-controller="PlotController">
         <div>
-            <nvd3 options="chartSettings" data="plotData">test</nvd3>
-        </div>
-
-         Data:
-         {{plotData[0].values.length}}
-
-
-        <div>
-            Time window (in ms): <input ng-model="timeWindow"></input>
-            {{timeWindow}}
+           <plotly plotly-data="data" plotly-layout="layout" plotly-options="options"></plotly>
         </div>
 
          <div>
              <button ng-click="StartPlots()">Start plots</button>
+        </div>
+        <div>
              <button ng-click="StopPlots()">Stop plots</button>
         </div>
 
-
-    <script src="scripts/d3.js"></script>
+    <!--<script src="scripts/d3.js"></script>
     <script src="scripts/nv.d3.js"></script>
-    <script src="scripts/angular_nvd3.js"></script>
-    <script src="scripts/plottingService_test.js"></script>
+    <script src="scripts/angular_nvd3.js"></script>-->
+    <script src="scripts/plotly.js"></script>
+    <script src="scripts/plottingService_multi.js"></script>
 </body>
 
 </html>
