@@ -4,55 +4,105 @@ app.factory('PlotService', ['$rootScope', function ($rootScope) {
 
     var plotService = {};
 
+    plotService.signalFactory = function () {
+        var signalsArray = [];
+
+        signalsArray.push(
+            {
+                "key": 'FirstSignal',
+                "values": []
+            });
+
+        signalsArray.push(
+            {
+                "key": 'SecondSignal',
+                "values": []
+            });
+        signalsArray.push(
+            {
+                "key": 'ThirdSignal',
+                "values": []
+            });
+        return signalsArray;
+    };
+
     return plotService;
 }]); //end of plotService
 
-app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', function ($rootScope, $scope, PlotService) {
+app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', '$interval', function ($rootScope, $scope, PlotService, $interval) {
 
     var intervalA, intervalB, intervalC;
 
-    $scope.StartPlots = function () {
-        intervalA = setInterval(function () {
-            $scope.$apply(function () {
-                var val = Math.floor(Math.random() * 100 + 1);
-                $scope.plotData[0].values.push(
-                    {
-                        "x": Date.now(),
-                        "y": val
-                    }
-                );
-            });
-        }, 50);
+    //Mockup data to check plotting functionality. Can be used as a reference of live data plotting 
+    $scope.plotData = PlotService.signalFactory();
+    var plotDataStorage = PlotService.signalFactory();
 
-        intervalB = setInterval(function () {
-            $scope.$apply(function () {
-                var val = Math.floor(Math.random() * 200 + 1);
-                $scope.plotData[1].values.push(
-                    {
-                        "x": Date.now(),
-                        "y": val
-                    }
-                );
-            });
-        }, 50);
+    var applyToScope = function (data, index) {
+        if ($scope.timeWindow !== undefined && $scope.timeWindow > 0) {
+            applyTimeWindow();
+        }
+        $scope.plotData[index].values.push(data);
+    };
 
-        intervalC = setInterval(function () {
-            $scope.$apply(function () {
-                var val = Math.floor(Math.random() * 300 + 1);
-                $scope.plotData[2].values.push(
-                    {
-                        "x": Date.now(),
-                        "y": val
-                    }
-                );
-            });
-        }, 50);
+    var applyTimeWindow = function () {
+        for (var i = 0; i < $scope.plotData.length; i++) {
+            if ($scope.timeWindow !== undefined && $scope.plotData[i].values !== undefined && $scope.plotData[i].values.length > 0) {
+                var lastSample = $scope.plotData[i].values[$scope.plotData[i].values.length - 1].x;
+                var firstSample = $scope.plotData[i].values[0].x;
+                if ((lastSample - firstSample) > $scope.timeWindow) {
+                    var toErease = $scope.plotData[i].values.shift();
+                    plotDataStorage[i].values.push(toErease);
+                }
+            }
+        }
+    };
 
+    var pushToPlotAllData = function () {
+        //copy rest of the data to global storage:
+        for (var i = 0; i < $scope.plotData.length; i++) {
+            plotDataStorage[i].values = plotDataStorage[i].values.concat($scope.plotData[i].values);
+            $scope.plotData[i].values = plotDataStorage[i].values.slice();
+        }
     }
+
+    $scope.StartPlots = function () {
+        var dataToPlot = {};
+        intervalA = $interval(function () {
+            var val = Math.floor(Math.random() * 100 + 1);
+            dataToPlot =
+                {
+                    "x": Date.now(),
+                    "y": val
+                }
+            applyToScope(dataToPlot, 0);
+        }, 50);
+
+        intervalB = $interval(function () {
+            var val = Math.floor(Math.random() * 100 + 1);
+            dataToPlot =
+                {
+                    "x": Date.now(),
+                    "y": val
+                }
+            applyToScope(dataToPlot, 1);
+        }, 50);
+
+        intervalC = $interval(function () {
+            var val = Math.floor(Math.random() * 100 + 1);
+            dataToPlot =
+                {
+                    "x": Date.now(),
+                    "y": val
+                }
+            applyToScope(dataToPlot, 2);
+        }, 50);
+    }
+
     $scope.StopPlots = function () {
-        clearInterval(intervalA);
-        clearInterval(intervalB);
-        clearInterval(intervalC);
+        $interval.cancel(intervalA);
+        $interval.cancel(intervalB);
+        $interval.cancel(intervalC);
+        pushToPlotAllData();
     }
 
     $scope.chartSettings = {
@@ -100,24 +150,5 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
             },
         }
     };
-
-    //Mockup data to check plotting functionality. Can be used as a reference of live data plotting 
-    $scope.plotData = [];
-
-    $scope.plotData.push(
-        {
-            "key": 'FirstSignal',
-            "values": []
-        });
-
-    $scope.plotData.push(
-        {
-            "key": 'SecondSignal',
-            "values": []
-        });
-    $scope.plotData.push(
-        {
-            "key": 'ThirdSignal',
-            "values": []
-        });    
 }]); //end of plotController
+
