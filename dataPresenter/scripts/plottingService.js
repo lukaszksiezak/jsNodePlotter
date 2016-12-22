@@ -1,10 +1,29 @@
 var app = angular.module('PlottingApp', ['nvd3']);
 
 app.factory('PlotService', ['$rootScope', function ($rootScope) {
+  
+  var socket = io();
+  var plotService = {};
 
-var plotService = {};
+    plotService.signalFactory = function () {
+        var signalsArray = [];
+        signalsArray.push(
+            {
+                "key": 'FirstSignal',
+                "values": []
+            });
+        return signalsArray;
+    };
 
-return plotService;
+    plotService.requestData = function(dataLabel){
+        socket.emit('getData',dataLabel);      
+    }
+
+    socket.on('dataReady', function(dataRaw){
+        $rootScope.$broadcast('dataReady', dataRaw);
+    });
+
+    return plotService;
 }]); //end of plotService
 
 app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', function ($rootScope, $scope, PlotService) {
@@ -61,26 +80,12 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
         }
     };
 
-    //Mockup data to check plotting functionality. Can be used as a reference of live data plotting 
-    $scope.plotData = [];
+    $scope.requestData = function(){
+        PlotService.requestData('FirstSignal');
+    }
 
-    $scope.plotData.push(
-        {
-            "key": 'FirstSignal',
-            "values": []
-        });
-
-
-    setInterval(function () {
-        $scope.$apply(function () {
-                var val = Math.floor(Math.random() * 100 + 1);
-                $scope.plotData[0].values.push(
-                    {
-                        "x": Date.now(),
-                        "y": val
-                    }
-                );
-            });        
-        }, 100);
+    $rootScope.$on('dataReady', function(){
+        console.log("data was collected: " + dataRaw);
+    })
     
 }]); //end of plotController

@@ -59,6 +59,6 @@ var logger = function (msg) {
 };
 
 //Act:
-var sampleDataSource = new dataProvider("First Signal");
+var sampleDataSource = new dataProvider("FirstSignal");
 sampleDataSource.generateData(1000);  //start generating data with sampling interval 1s
 sendDataPackage(5000);    //sending data with interval 10s

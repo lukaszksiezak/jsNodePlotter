@@ -6,14 +6,14 @@ var url = 'mongodb://localhost:27017/jsPlotterDataStorage';
 
 module.exports = {
     read: function databaseRead(dataLabel) {
-        MongoClient.connect(url, function (err, db) {
-            var dataFromDB;
+       var dataFromDB = MongoClient.connect(url, function (err, db) {
+            var dataRaw;
             if (err) {
                 logger('Unable to connect to the mongoDB server. Error:' + err);
             } else {
                 logger('Connection established to ' + url);
                 var collection = db.collection('SensorData');
-                dataFromDB = collection.find({ name: dataLabel }).toArray(function (err, result) {
+                dataRaw = collection.find({ name: dataLabel }).toArray(function (err, result) {
                     if (err) {
                         logger(err);
                     } else if (result.length) {
@@ -25,8 +25,9 @@ module.exports = {
                 });
                 db.close();
             }
-            return dataFromDB;
+            return dataRaw;
         });
+        return dataFromDB;
     }
 }
 
