@@ -1,8 +1,15 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var dbWriter = require('./databaseWriter');
 var dbReader = require('./databaseReader');
+
+app.use(express.static(__dirname + '/'));
+app.get('/', function(req, res){  
+  res.sendFile(__dirname + '/dataPresenter.html');
+  logger("WebPage was requested by a browser /get")
+});
 
 io.on('connection', function(socket){
   logger("DataProvider connected");
