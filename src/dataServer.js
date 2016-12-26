@@ -6,12 +6,12 @@ var dbWriter = require('./databaseWriter');
 var dbReader = require('./databaseReader');
 
 app.use(express.static(__dirname + '/'));
-app.get('/', function(req, res){  
+app.get('/', function (req, res) {
   res.sendFile(__dirname + '/dataPresenter.html');
   logger("WebPage was requested by a browser /get")
 });
 
-io.on('connection', function(socket){
+io.on('connection', function (socket) {
   logger("DataProvider connected");
 
   socket.on('dataReady', function (data) {
@@ -21,22 +21,23 @@ io.on('connection', function(socket){
     socket.emit('dataWritten'); //Ack for dataProvider. 
   });
 
-  socket.on('getData',function(dataLabel){
+  socket.on('getData', function (dataLabel) {
     logger("Reading data from mongo database");
-    var dataFromDB = dbReader.read(dataLabel);
-    if(dataFromDB!==undefined){
-      socket.emit('dataReady',dataFromDB);
-    }
-    else{
-      socket.emit('noData');
-    }
+    var dataFromDB = dbReader.read(dataLabel, function (result) {
+      if (result !== undefined) {
+        logger("Data on server: " + result);
+      }
+      else {
+        socket.emit('noData');
+      }
+    });
   });
 });
 
-http.listen(1337, function(){
+http.listen(1337, function () {
   logger('Listening on localhost:1337');
 });
 
-var logger = function(msg){
-  console.log(new Date().toLocaleString() + ": " + msg);
+var logger = function (msg) {
+  console.log("[Server] " + new Date().toLocaleString() + ": " + msg);
 };

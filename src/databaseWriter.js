@@ -32,5 +32,5 @@ module.exports = {
 }
 
 var logger = function (msg) {
-  console.log(new Date().toLocaleString() + ": " + msg);
+  console.log("[DBwriter] " + new Date().toLocaleString() + ": " + msg);
 };

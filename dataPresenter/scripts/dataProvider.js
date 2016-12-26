@@ -75,11 +75,11 @@ socket.on('dataWritten', function () {
     sampleDataSource.ereaseCurrentData();
 });
 
-var logger = function logger(msg) {
-    console.log(new Date().toLocaleString() + ": " + msg);
-};
-
 //Act:
 var sampleDataSource = new dataProvider("FirstSignal");
 sampleDataSource.generateData(1000); //start generating data with sampling interval 1s
 sendDataPackage(5000); //sending data with interval 10s
+
+var logger = function logger(msg) {
+    console.log("[Provider] " + new Date().toLocaleString() + ": " + msg);
+};
