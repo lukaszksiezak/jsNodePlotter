@@ -12,8 +12,7 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-  logger("DataProvider connected");
-
+  logger("Client connected");
   socket.on('dataReady', function (data) {
     logger("Data from provider received");
     dbWriter.create(data);
@@ -25,7 +24,10 @@ io.on('connection', function (socket) {
     logger("Reading data from mongo database");
     var dataFromDB = dbReader.read(dataLabel, function (result) {
       if (result !== undefined) {
-        logger("Data on server: " + result);
+        logger("Data on server: ");
+        result.forEach(function(element) {
+          console.log(element.name+ " "+element.timestamp + " " + element.value);
+        }, this); 
       }
       else {
         socket.emit('noData');
