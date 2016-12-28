@@ -19,14 +19,26 @@ app.factory('PlotService', ['$rootScope', function ($rootScope) {
         socket.emit('getData',dataLabel);      
     }
 
-    socket.on('dataReady', function(dataRaw){
-        $rootScope.$broadcast('dataReady', dataRaw);
+    plotService.requestDataQueryTimestamp = function(dataLabel, timestamp){
+        socket.emit('getDataQueryTimestamp',dataLabel,timestamp);
+    }
+
+    socket.on('DataForPlot', function(dataRaw){
+        $rootScope.$broadcast('PlotPointReady', dataRaw);
     });
 
     return plotService;
 }]); //end of plotService
 
 app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', function ($rootScope, $scope, PlotService) {
+
+    $scope.plotData = [];
+    
+    $scope.plotData.push( //To be changed to auto-generation from server data.
+            {
+                "key": 'FirstSignal',
+                "values": []
+            });
 
     $scope.chartSettings = {
         chart: {
@@ -84,8 +96,18 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
         PlotService.requestData('FirstSignal');
     }
 
-    $rootScope.$on('dataReady', function(){
-        console.log("data was collected: " + dataRaw);
+    $scope.requestDataQueryTimestamp = function(){
+        PlotService.requestDataQueryTimestamp('FirstSignal', $scope.plotData[0].values[$scope.plotData[0].values.length-1].x); //as an argument passing the timestamp of the last sample on plot.
+    }
+
+    $rootScope.$on('PlotPointReady', function(event,pointData){
+        console.log("data was collected: " + pointData.name + " " + pointData.timestamp + " " + pointData.value);
+        $scope.$apply(function(){
+            $scope.plotData[0].values.push({
+                "x" : pointData.timestamp,
+                "y" : pointData.value
+            });
+        })
     })
     
 }]); //end of plotController

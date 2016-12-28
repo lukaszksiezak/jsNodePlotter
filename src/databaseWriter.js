@@ -20,7 +20,7 @@ module.exports = {
               if (err) {
                 logger(err);
               } else {
-                logger('Inserted %s ', dataElem);
+                logger('Inserted new data');
               }
             });
           });

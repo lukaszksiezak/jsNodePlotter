@@ -13,16 +13,15 @@
 <body data-ng-app="PlottingApp">
 
     <div data-ng-controller="PlotController">
-        <!--<div>
+        <div>
             <nvd3 options="chartSettings" data="plotData">test</nvd3>
         </div>
 
          Data:
          {{plotData[0].values.length}}
-    </div>-->
-
-    <div>
+            
         <button ng-click="requestData()">request data</button>
+        <button ng-click="requestDataQueryTimestamp()">Request latest data</button>
     </div>
     <script src="socket.io-1.2.0.js"></script>
     <script src="d3.js"></script>

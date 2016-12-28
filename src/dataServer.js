@@ -22,18 +22,30 @@ io.on('connection', function (socket) {
 
   socket.on('getData', function (dataLabel) {
     logger("Reading data from mongo database");
-    var dataFromDB = dbReader.read(dataLabel, function (result) {
-      if (result !== undefined) {
-        logger("Data on server: ");
-        result.forEach(function(element) {
-          console.log(element.name+ " "+element.timestamp + " " + element.value);
-        }, this); 
+    dbReader.readAllData(dataLabel, function (result) {
+      if (result !== undefined) {  
+         result.forEach(function(element) {        
+            socket.emit('DataForPlot', element);
+         }, this); 
       }
       else {
         socket.emit('noData');
       }
     });
-  });
+   });
+
+   socket.on('getDataQueryTimestamp', function(dataLabel,queryTimestamp){
+     dbReader.queryByDate(dataLabel,queryTimestamp,function(result){
+       if(result !== undefined){
+         result.forEach(function(element) {        
+            socket.emit('DataForPlot', element);
+         }, this); 
+       }
+       else{
+         socket.emit('noData');
+       }
+     });
+   });
 });
 
 http.listen(1337, function () {
