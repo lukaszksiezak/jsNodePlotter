@@ -7,6 +7,9 @@ var io = require('socket.io')(http);
 var dbWriter = require('./databaseWriter');
 var dbReader = require('./databaseReader');
 
+var providerSocket; //should be array
+var presenterSocket; //should be array
+
 app.use(express.static(__dirname + '/'));
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/dataPresenter.html');
@@ -15,11 +18,28 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   logger("Client connected");
+
+  socket.on('Intro_DataProvider', function () {
+    logger("Provider present!");
+    providerSocket = socket;
+  });
+
+  socket.on('Intro_DataPresenter', function () {
+    logger("Presenter present!");
+    presenterSocket = socket;
+  });
   socket.on('dataReady', function (data) {
     logger("Data from provider received");
     dbWriter.create(data);
     logger("Data stored in database.");
-    socket.emit('dataWritten'); //Ack for dataProvider. 
+    socket.emit('dataWritten'); //Ack for dataProvider.   
+
+    if (presenterSocket !== undefined) {
+      //send data only if presenter exists!
+      pushDataToPresenter(presenterSocket, data); //Should be broadcast to all connected presenters
+    }
+
+    logger("Data pushed to presenter");
   });
 
   socket.on('getData', function (dataLabel) {
@@ -47,6 +67,12 @@ io.on('connection', function (socket) {
     });
   });
 });
+
+var pushDataToPresenter = function pushDataToPresenter(socket, data) {
+  data.forEach(function (element) {
+    socket.emit('DataForPlot', element);
+  }, this);
+};
 
 http.listen(1337, function () {
   logger('Listening on localhost:1337');

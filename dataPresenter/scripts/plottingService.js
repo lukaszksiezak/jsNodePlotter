@@ -15,10 +15,14 @@ app.factory('PlotService', ['$rootScope', function ($rootScope) {
         return signalsArray;
     };
 
+    plotService.introduceYourself = function(){
+        socket.emit('Intro_DataPresenter');
+    }
+
     plotService.requestData = function(dataLabel){
         socket.emit('getData',dataLabel);      
     }
-
+    
     plotService.requestDataQueryTimestamp = function(dataLabel, timestamp){
         socket.emit('getDataQueryTimestamp',dataLabel,timestamp);
     }
@@ -27,13 +31,14 @@ app.factory('PlotService', ['$rootScope', function ($rootScope) {
         $rootScope.$broadcast('PlotPointReady', dataRaw);
     });
 
+    plotService.introduceYourself();
     return plotService;
 }]); //end of plotService
 
 app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', function ($rootScope, $scope, PlotService) {
 
     $scope.plotData = [];
-    
+            
     $scope.plotData.push( //To be changed to auto-generation from server data.
             {
                 "key": 'FirstSignal',

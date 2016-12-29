@@ -63,6 +63,12 @@ var sendDataPackage = function sendDataPackage(sendingInterval) {
     }, sendingInterval);
 };
 
+var IntrouduceYourself = function IntrouduceYourself() {
+    if (socket) {
+        socket.emit('Intro_DataProvider');
+    }
+};
+
 //Server connection part:
 var socket = io.connect('http://127.0.0.1:1337');
 
@@ -76,9 +82,10 @@ socket.on('dataWritten', function () {
 });
 
 //Act:
+IntrouduceYourself();
 var sampleDataSource = new dataProvider("FirstSignal");
 sampleDataSource.generateData(1000); //start generating data with sampling interval 1s
-sendDataPackage(5000); //sending data with interval 10s
+sendDataPackage(5000); //sending data with interval 5s
 
 var logger = function logger(msg) {
     console.log("[Provider] " + new Date().toLocaleString() + ": " + msg);
