@@ -17,3 +17,26 @@ The main aim of the project was to create wrappable and customizable live plotti
 
 ###Environment preparation
 
+Modify runMongo.bat according to Mongo's binaries location. Create empty 'data' directory. In command line start MongoDB.
+
+Next operations:
+
+    npm install
+    npm run build    
+    node dataPresenter/scripts/dataServer.js 
+    
+The server should start working. Go to browser and connect to localhost:1337 - AngularJS app should open. 
+Run mock data provider:
+    
+    node dataPresenter/scripts/dataProvider.js
+    
+DataProvider should establish communication with the server. Server receives data from provider - writes them to database and pushes to Angular app. Angular plotting app should automatically start plotting data. 
+
+###Playground
+
+For testing purposes plotly lib was included into presenter mockup. To see it in action:
+
+    npm install -g http-server
+    http-server dataPresenter
+  
+Connect to: localhost:8080/dataPresenterMulti.html
