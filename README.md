@@ -28,11 +28,11 @@ Next operations:
 The server should start working. Go to browser and connect to localhost:1337 - AngularJS app should open. 
 Run mock data provider:
     
-    node dataPresenter/scripts/dataProvider.js
+    node dataPresenter/scripts/dataProvider.js InputName
     
-DataProvider should establish communication with the server. Server receives data from provider - writes them to database and pushes to Angular app. Angular plotting app should automatically start plotting data. 
+DataProvider should establish communication with the server. Server receives data from provider - writes them to database and pushes to Angular app. Angular plotting app should automatically start plotting data. It is possible to run multiple dataProviders and they will be automatically detected by Angular app and added to plots. 
 
-###Playground
+###Playground - plotly app proof of concept
 
 For testing purposes plotly lib was included into presenter mockup. To see it in action:
 
