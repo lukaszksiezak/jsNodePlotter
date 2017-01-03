@@ -2,9 +2,9 @@
 
 /*
 Server is the main part of the application. It controls data storage (read/write) operations in database, is a controller for dataproviders and serves a presenter application.
-A provider has to connect - introduce himself (Intro_DataProvider) and then can simply send data ('dataReady') with data package.
-A presenter connects - introduces himself (Intro_DataPresenter) and listen to 'DataForPlot' event with latest data package.
-Additionally, the server can push all the data from database to presenter ('getData') and send a specified package of data ('getDataQueryTimestamp'). 
+A provider has to connect - introduce himself (IntroDataProvider) and then can simply send data ('DataReady') with data package.
+A presenter connects - introduces himself (IntroDataPresenter) and listen to 'DataForPlot' event with latest data package.
+Additionally, the server can push all the data from database to presenter ('GetData') and send a specified package of data ('GetDataQueryTimestamp'). 
 */
 
 var express = require('express');
@@ -28,7 +28,7 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
   logger("Client connected");
 
-  socket.on('Intro_DataProvider', function (signalName) {
+  socket.on('IntroDataProvider', function (signalName) {
     logger("Provider present!");
     //providerSocket.push(socket);
     signalsList.push(signalName); //add a new signal to the main array.
@@ -38,25 +38,29 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('Intro_DataPresenter', function () {
+  socket.on('IntroDataPresenter', function () {
     logger("Presenter present!");
     presenterSocket = socket;
+
+    if (signalsList.length > 0) {
+      socket.emit('SignalsBeingListened', signalsList);
+      logger("Signals being listened pushed to presenter");
+    }
   });
-  socket.on('dataReady', function (data) {
+  socket.on('DataReady', function (data) {
     logger("Data from provider received");
     dbWriter.create(data);
     logger("Data stored in database.");
-    socket.emit('dataWritten'); //Ack for dataProvider.   
+    socket.emit('DataWritten'); //Ack for dataProvider.   
 
     if (presenterSocket !== undefined) {
       //send data only if presenter exists!
       pushDataToPresenter(presenterSocket, data); //Should be broadcast to all connected presenters
     }
-
     logger("Data pushed to presenter");
   });
 
-  socket.on('getData', function (dataLabel) {
+  socket.on('GetData', function (dataLabel) {
     logger("Reading data from mongo database");
     dbReader.readAllData(dataLabel, function (result) {
       if (result !== undefined) {
@@ -64,19 +68,19 @@ io.on('connection', function (socket) {
           socket.emit('DataForPlot', element);
         }, this);
       } else {
-        socket.emit('noData');
+        socket.emit('NoData');
       }
     });
   });
 
-  socket.on('getDataQueryTimestamp', function (dataLabel, queryTimestamp) {
+  socket.on('GetDataQueryTimestamp', function (dataLabel, queryTimestamp) {
     dbReader.queryByDate(dataLabel, queryTimestamp, function (result) {
       if (result !== undefined) {
         result.forEach(function (element) {
           socket.emit('DataForPlot', element);
         }, this);
       } else {
-        socket.emit('noData');
+        socket.emit('NoData');
       }
     });
   });

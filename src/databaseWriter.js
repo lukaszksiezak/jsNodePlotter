@@ -19,9 +19,10 @@ module.exports = {
             collection.insert(dataElem, function (err, result) {
               if (err) {
                 logger(err);
-              } else {
-                logger('Inserted new data');
-              }
+              } 
+              // else {                
+              //   logger('Inserted new data');
+              // }
             });
           });
         }

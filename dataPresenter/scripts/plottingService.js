@@ -5,34 +5,28 @@ app.factory('PlotService', ['$rootScope', function ($rootScope) {
   var socket = io();
   var plotService = {};
 
-    plotService.signalFactory = function () {
-        var signalsArray = [];
-        signalsArray.push(
-            {
-                "key": 'FirstSignal',
-                "values": []
-            });
-        return signalsArray;
-    };
-
     plotService.introduceYourself = function(){
-        socket.emit('Intro_DataPresenter');
+        socket.emit('IntroDataPresenter');
     }
 
     plotService.requestData = function(dataLabel){
-        socket.emit('getData',dataLabel);      
+        socket.emit('GetData', dataLabel);      
     }
     
     plotService.requestDataQueryTimestamp = function(dataLabel, timestamp){
-        socket.emit('getDataQueryTimestamp',dataLabel,timestamp);
+        socket.emit('GetDataQueryTimestamp',dataLabel,timestamp);
     }
 
     socket.on('NewSignal', function(signalName){
-        $rootScope.$broadcast('NewSignalForPlot', signalName.shift());
+        $rootScope.$broadcast('NewSignalForPlot', signalName[0]);
     });
 
     socket.on('DataForPlot', function(dataRaw){
         $rootScope.$broadcast('PlotPointReady', dataRaw);
+    });
+
+    socket.on('SignalsBeingListened', function(signalsList){
+        $rootScope.$broadcast('CreateSignalsArr', signalsList);
     });
 
     plotService.introduceYourself();
@@ -111,6 +105,16 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
     //     PlotService.requestDataQueryTimestamp('FirstSignal', $scope.plotData[0].values[$scope.plotData[0].values.length-1].x); //as an argument passing the timestamp of the last sample on plot.
     // }
 
+    $rootScope.$on('CreateSignalsArr', function(event, signalsList){
+        for(var i=0;i<signalsList.length;i++){
+            $scope.plotData.push( 
+            {
+                "key": signalsList[i].shift(),
+                "values": []
+            });
+        }
+    });
+
     $rootScope.$on('PlotPointReady', function(event,pointData){
         console.log("data was collected: " + pointData.name + " " + pointData.timestamp + " " + pointData.value);        
         var key = lookup(pointData.name);
@@ -127,7 +131,7 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
     var lookup = function(name){
         var idx = null;
         for(var i=0;i<$scope.plotData.length;i++){
-            if($scope.plotData[i].key===name.shift()){
+            if($scope.plotData[i].key===name[0]){
                 idx = i;
                 break;
                 }            

@@ -58,14 +58,14 @@ var sendDataPackage = function sendDataPackage(sendingInterval) {
         //var buffer = new ArrayBuffer(data);
 
         if (socket) {
-            socket.emit('dataReady', data);
+            socket.emit('DataReady', data);
         }
     }, sendingInterval);
 };
 
 var IntrouduceYourself = function IntrouduceYourself(signalName) {
     if (socket) {
-        socket.emit('Intro_DataProvider', signalName);
+        socket.emit('IntroDataProvider', signalName);
     }
 };
 
@@ -76,7 +76,7 @@ socket.on('connect', function (socket) {
     logger('Connection with server established');
 });
 
-socket.on('dataWritten', function () {
+socket.on('DataWritten', function () {
     logger("Data received by server! Ereasing local collection");
     sampleDataSource.ereaseCurrentData();
 });

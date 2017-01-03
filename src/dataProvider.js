@@ -37,14 +37,14 @@ var sendDataPackage = function (sendingInterval) {
         //var buffer = new ArrayBuffer(data);
         
         if (socket) {
-           socket.emit('dataReady', data);          
+           socket.emit('DataReady', data);          
         }
     }, sendingInterval);
 }
 
 var IntrouduceYourself = function(signalName){
     if(socket){
-        socket.emit('Intro_DataProvider', signalName);
+        socket.emit('IntroDataProvider', signalName);
     }
 }
 
@@ -55,7 +55,7 @@ socket.on('connect', function (socket) {
     logger('Connection with server established');
 });
 
-socket.on('dataWritten', function () {
+socket.on('DataWritten', function () {
     logger("Data received by server! Ereasing local collection");
     sampleDataSource.ereaseCurrentData();
 });
@@ -67,8 +67,8 @@ var signalName = process.argv.slice(2);
 
 IntrouduceYourself(signalName);
 var sampleDataSource = new dataProvider(signalName);
-sampleDataSource.generateData(10);  //start generating data with sampling interval 10ms
-sendDataPackage(500);    //sending data with interval 0.5s
+sampleDataSource.generateData(1000);  //start generating data with sampling interval 10ms
+sendDataPackage(5000);    //sending data with interval 0.5s
 
 
 var logger = function (msg) {
