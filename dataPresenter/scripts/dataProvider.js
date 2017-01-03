@@ -63,9 +63,9 @@ var sendDataPackage = function sendDataPackage(sendingInterval) {
     }, sendingInterval);
 };
 
-var IntrouduceYourself = function IntrouduceYourself() {
+var IntrouduceYourself = function IntrouduceYourself(signalName) {
     if (socket) {
-        socket.emit('Intro_DataProvider');
+        socket.emit('Intro_DataProvider', signalName);
     }
 };
 
@@ -82,10 +82,13 @@ socket.on('dataWritten', function () {
 });
 
 //Act:
-IntrouduceYourself();
-var sampleDataSource = new dataProvider("FirstSignal");
-sampleDataSource.generateData(1000); //start generating data with sampling interval 1s
-sendDataPackage(5000); //sending data with interval 5s
+var signalName = process.argv.slice(2);
+
+IntrouduceYourself(signalName);
+var sampleDataSource = new dataProvider(signalName);
+sampleDataSource.generateData(1000); //start generating data with sampling interval 10ms
+sendDataPackage(5000); //sending data with interval 0.5s
+
 
 var logger = function logger(msg) {
     console.log("[Provider] " + new Date().toLocaleString() + ": " + msg);

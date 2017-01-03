@@ -12,8 +12,10 @@ var io = require('socket.io')(http);
 var dbWriter = require('./databaseWriter');
 var dbReader = require('./databaseReader');
 
-var providerSocket; //should be array
+//var providerSocket = []; //an array storing information about all connected providers.
 var presenterSocket; //should be array
+
+var signalsList = []; //Array which stores the signals which are coming from different providers.
 
 app.use(express.static(__dirname + '/'));
 app.get('/', function (req, res) {
@@ -24,9 +26,14 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
   logger("Client connected");
   
-  socket.on('Intro_DataProvider', function() {
+  socket.on('Intro_DataProvider', function(signalName) {
     logger("Provider present!");
-    providerSocket = socket;
+    //providerSocket.push(socket);
+    signalsList.push(signalName); //add a new signal to the main array.
+
+    if(presenterSocket){
+      presenterSocket.emit('NewSignal', signalName); //if a new provider connects - emit the notification to presenter;
+    }
   });
 
   socket.on('Intro_DataPresenter', function() {

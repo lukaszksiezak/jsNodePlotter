@@ -1,5 +1,12 @@
 'use strict';
 
+/*
+Server is the main part of the application. It controls data storage (read/write) operations in database, is a controller for dataproviders and serves a presenter application.
+A provider has to connect - introduce himself (Intro_DataProvider) and then can simply send data ('dataReady') with data package.
+A presenter connects - introduces himself (Intro_DataPresenter) and listen to 'DataForPlot' event with latest data package.
+Additionally, the server can push all the data from database to presenter ('getData') and send a specified package of data ('getDataQueryTimestamp'). 
+*/
+
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -7,8 +14,10 @@ var io = require('socket.io')(http);
 var dbWriter = require('./databaseWriter');
 var dbReader = require('./databaseReader');
 
-var providerSocket; //should be array
+//var providerSocket = []; //an array storing information about all connected providers.
 var presenterSocket; //should be array
+
+var signalsList = []; //Array which stores the signals which are coming from different providers.
 
 app.use(express.static(__dirname + '/'));
 app.get('/', function (req, res) {
@@ -19,9 +28,14 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
   logger("Client connected");
 
-  socket.on('Intro_DataProvider', function () {
+  socket.on('Intro_DataProvider', function (signalName) {
     logger("Provider present!");
-    providerSocket = socket;
+    //providerSocket.push(socket);
+    signalsList.push(signalName); //add a new signal to the main array.
+
+    if (presenterSocket) {
+      presenterSocket.emit('NewSignal', signalName); //if a new provider connects - emit the notification to presenter;
+    }
   });
 
   socket.on('Intro_DataPresenter', function () {
