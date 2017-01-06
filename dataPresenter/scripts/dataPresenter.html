@@ -7,22 +7,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual dataPresenter</title>
     <link href="nv.d3.css" rel="stylesheet">
+    <link href="bootstrap.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
     <script src="angular.js"></script>
 </head>
 
 <body data-ng-app="PlottingApp">
 
     <div data-ng-controller="PlotController">
-        <div>
-            <nvd3 options="chartSettings" data="plotData">test</nvd3>
-        </div>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+      <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">jsPlotter</a>
 
-         Data:
-         {{plotData[0].values.length}}
-            
-        <button ng-click="requestData()">request data</button>
-        <button ng-click="requestDataQueryTimestamp()">Request latest data</button>
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Credits</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Main Plot <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Signals Details</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Settings</a>
+            </li>
+          </ul>
+        </nav>
+
+        <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+          <h1>Socket data plotter</h1>
+
+          <section class="text-center">
+            <div class="placeholder">
+                <nvd3 options="chartSettings" data="plotData">test</nvd3>
+            </div>          
+            <!--<button ng-click="requestData()">request data</button>
+            <button ng-click="requestDataQueryTimestamp()">Request latest data</button>-->
+          </section>
+
+          <h3>Details</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Last Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <!--TODO foreach to list signals info-->
+                <tr>
+                  <td>1</td>
+                  <td>Signal 1</td>
+                  <td>Singal representing number of connections incoming to the server</td>
+                  <td>Online</td>
+                  <td>XXX</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
     </div>
+    <!--end of controller-->
+    </div>
+    <script src="bootstrap.js"></script>
     <script src="socket.io-1.2.0.js"></script>
     <script src="d3.js"></script>
     <script src="nv.d3.js"></script>

@@ -48,7 +48,7 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
     $scope.chartSettings = {
         chart: {
             type: 'lineWithFocusChart',
-            height: 600,
+            height: 500,
             margin: {
                 top: 40,
                 right: 40,
