@@ -60,15 +60,13 @@ socket.on('DataWritten', function () {
     sampleDataSource.ereaseCurrentData();
 });
 
-
-
 //Act:
 var signalName = process.argv.slice(2);
 
 IntrouduceYourself(signalName);
 var sampleDataSource = new dataProvider(signalName);
-sampleDataSource.generateData(1000);  //start generating data with sampling interval 10ms
-sendDataPackage(5000);    //sending data with interval 0.5s
+sampleDataSource.generateData(100);  //start generating data with sampling interval 10ms
+sendDataPackage(500);    //sending data with interval 0.5s
 
 
 var logger = function (msg) {
