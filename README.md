@@ -40,3 +40,6 @@ For testing purposes plotly lib was included into presenter mockup. To see it in
     http-server dataPresenter
   
 Connect to: localhost:8080/dataPresenterMulti.html
+
+###Screenshot of the working app
+![How it looks](http://i.imgur.com/uWUvbox.png)
