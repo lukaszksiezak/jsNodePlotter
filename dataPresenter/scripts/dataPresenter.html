@@ -75,13 +75,12 @@
                 </tr>
               </thead>
               <tbody>
-                  <!--TODO foreach to list signals info-->
-                <tr>
-                  <td>1</td>
-                  <td>Signal 1</td>
-                  <td>Singal representing number of connections incoming to the server</td>
+                <tr ng-repeat="sig in plotData">
+                  <td>{{$index}}</td>
+                  <td>{{sig.key}}</td>
+                  <td>{{sig.description}}</td>
                   <td>Online</td>
-                  <td>XXX</td>
+                  <td>{{sig.values[sig.values.length-1].x}}</td>
                 </tr>
               </tbody>
             </table>

@@ -97,21 +97,14 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
         }
     };
 
-    // $scope.requestData = function(){
-    //     PlotService.requestData('FirstSignal');
-    // }
-
-    // $scope.requestDataQueryTimestamp = function(){
-    //     PlotService.requestDataQueryTimestamp('FirstSignal', $scope.plotData[0].values[$scope.plotData[0].values.length-1].x); //as an argument passing the timestamp of the last sample on plot.
-    // }
-
     $rootScope.$on('CreateSignalsArr', function(event, signalsList){
         for(var i=0;i<signalsList.length;i++){
             $scope.plotData.push( 
             {
-                "key": signalsList[i].shift(),
+                "key": signalsList[i].signalName,
+                "description" : signalsList[i].signalDescription,
                 "values": []
-            });
+            });            
         }
     });
 
@@ -131,7 +124,7 @@ app.controller('PlotController', ['$rootScope', '$scope', 'PlotService', functio
     var lookup = function(name){
         var idx = null;
         for(var i=0;i<$scope.plotData.length;i++){
-            if($scope.plotData[i].key===name[0]){
+            if($scope.plotData[i].key===name){
                 idx = i;
                 break;
                 }            

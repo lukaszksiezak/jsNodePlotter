@@ -16,6 +16,7 @@ var dbReader = require('./databaseReader');
 var presenterSocket; //should be array
 
 var signalsList = []; //Array which stores the signals which are coming from different providers.
+var signalsDescriptions = [];
 
 app.use(express.static(__dirname + '/'));
 app.get('/', function (req, res) {
@@ -26,13 +27,13 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
   logger("Client connected");
 
-  socket.on('IntroDataProvider', function (signalName) {
+  socket.on('IntroDataProvider', function (signalDetails) {
     logger("Provider present!");
     //providerSocket.push(socket);
-    signalsList.push(signalName); //add a new signal to the main array.
+    signalsList.push(signalDetails); //add a new signal to the main array.
 
     if (presenterSocket) {
-      presenterSocket.emit('NewSignal', signalName); //if a new provider connects - emit the notification to presenter;
+      presenterSocket.emit('NewSignal', signalDetails); //if a new provider connects - emit the notification to presenter;
     }
   });
 
