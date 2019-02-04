@@ -14,6 +14,7 @@
         "socket.io-client":"^1.7.2"
     },
     "scripts": {
-        "build": "babel src -d dataPresenter/scripts"
+        "build": "babel src -d dataPresenter/scripts",
+        "start": "node dataPresenter/scripts/dataServer.js"
     }
 }
