@@ -49,7 +49,7 @@ var IntrouduceYourself = function(signalDetails){
 }
 
 //Server connection part:
-var socket = io.connect('http://127.0.0.1:1337');
+var socket = io.connect('http://data_server:1337');
 
 socket.on('connect', function (socket) {
     logger('Connection with server established');

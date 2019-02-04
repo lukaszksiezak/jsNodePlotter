@@ -1,0 +1,23 @@
+version: "2"
+services:
+  data_server:
+    container_name: data_server
+    restart: always
+    build: 
+      context: .
+      dockerfile: Server.Dockerfile
+    ports:
+      - "1337:1337"
+  data_presenter:
+    container_name: data_presenter
+    restart: always
+    build:
+      context: .
+      dockerfile: Provider.Dockerfile
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
