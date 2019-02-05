@@ -8,12 +8,24 @@ services:
       dockerfile: Server.Dockerfile
     ports:
       - "1337:1337"
-  data_presenter:
-    container_name: data_presenter
+  data_presenter_1:
+    container_name: data_presenter_1
     restart: always
     build:
       context: .
       dockerfile: Provider.Dockerfile
+    command: 
+      node ./dataPresenter/scripts/dataProvider.js SampleSignal1 RandomSignal1
+  
+  data_presenter_2:
+    container_name: data_presenter_2
+    restart: always
+    build:
+      context: .
+      dockerfile: Provider.Dockerfile
+    command: 
+      node ./dataPresenter/scripts/dataProvider.js SampleSignal2 RandomSignal2
+      
   mongo:
     container_name: mongo
     image: mongo

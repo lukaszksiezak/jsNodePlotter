@@ -8,6 +8,5 @@ COPY /src /usr/src/app/src
 RUN npm install
 RUN npm run build
 
-CMD ["node", "./dataPresenter/scripts/dataProvider.js", "TestSignal", "TestSignal"]
 
 
